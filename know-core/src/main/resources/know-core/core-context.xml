@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <!-- LUCENE SEARCH CONFIG -->
+    <util:constant id="LUCENE_VERSION" static-field="org.apache.lucene.util.Version.LUCENE_36"/>
+
+    <bean id="luceneAnalyzer" class="org.apache.lucene.analysis.standard.StandardAnalyzer">
+        <constructor-arg ref="LUCENE_VERSION"/>
+    </bean>
+
+    <bean id="luceneDirectory" class="org.apache.lucene.store.FSDirectory" factory-method="open">
+        <constructor-arg>
+            <bean class="java.io.File">
+                <constructor-arg value="./index"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="org.apache.lucene.store.SimpleFSLockFactory"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="queryParser" class="org.apache.lucene.queryParser.QueryParser">
+        <constructor-arg ref="LUCENE_VERSION"/>
+        <constructor-arg value="contents"/>
+        <constructor-arg ref="luceneAnalyzer"/>
+    </bean>
+
+    <bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper"/>
+
+    <bean id="luceneUtil" class="net.crfsol.know.core.util.LuceneUtil"/>
+    <bean id="tagService" class="net.crfsol.know.core.service.TagServiceImpl"/>
+
+
+    <context:annotation-config></context:annotation-config>
+
+
+</beans>

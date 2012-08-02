@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <util:list id="resolvers" list-class="java.util.ArrayList">
+        <bean class="net.crfsol.know.resource.filesystem.resolver.TextFileResolver"/>
+        <bean class="net.crfsol.know.resource.filesystem.resolver.WordResolver"/>
+        <bean class="net.crfsol.know.resource.filesystem.resolver.ExcelResolver"/>
+        <bean class="net.crfsol.know.resource.filesystem.resolver.PdfResolver"/>
+        <bean class="net.crfsol.know.resource.filesystem.resolver.PowerpointResolver"/>
+        <bean class="net.crfsol.know.resource.filesystem.resolver.ImageResolver"/>
+    </util:list>
+
+    <bean id="resourceResolverFactory" class="net.crfsol.know.resource.filesystem.resolver.ResourceResolverFactory">
+        <property name="resolvers" ref="resolvers"/>
+    </bean>
+
+    <bean id="resourceService" class="net.crfsol.know.resource.filesystem.ResourceServiceFilesystemImpl"/>
+
+    <context:annotation-config/>
+
+
+</beans>
