@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>javax.inject</groupId>
-            <artifactId>inject-api</artifactId>
+            <artifactId>javax.inject</artifactId>
         </dependency>
 
         <dependency>
