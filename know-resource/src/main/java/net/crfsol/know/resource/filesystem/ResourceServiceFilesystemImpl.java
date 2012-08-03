@@ -40,7 +40,7 @@ public class ResourceServiceFilesystemImpl implements ResourceService {
     }
 
     private void resolveResource(File file, Date sinceDate, ResourceListener listener) {
-        if (sinceDate == null || file.lastModified() > sinceDate.getTime()) {
+        if (sinceDate == null || file.lastModified() > sinceDate.getTime() && !file.getName().startsWith(".")) {
             Resource r = resolverFactory.getResourceResolver(file).resolveResource(file);
             if (r != null) {
                 listener.resourceFound(r);

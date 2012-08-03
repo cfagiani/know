@@ -91,7 +91,7 @@ public class LuceneUtil {
 
             if (matches.totalHits > 0) {
                 for(int i =0; i< matches.totalHits; i++){
-                    Document doc  = getDocByInternalId(matches.scoreDocs[0].doc);
+                    Document doc  = getDocByInternalId(matches.scoreDocs[i].doc);
                     Resource r = new Resource();
                     if(doc.getFieldable("title")!=null){
                         r.setName(doc.getFieldable("title").stringValue());
