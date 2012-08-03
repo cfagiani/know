@@ -17,6 +17,8 @@ public class KnowCli {
     private static final String QUIT_CMD = "quit";
     private static final String ADD_ROOT_CMD = "addRoot";
     private static final String SEARCH_CMD = "search";
+    private static final String ADD_TAG_CMD = "addTag";
+    private static final String TAG_DOC_CMD = "tagDoc";
 
     @Inject
     KnowEngine knowEngine;
@@ -54,27 +56,28 @@ public class KnowCli {
 
             String[] tokenizedLine = command.split(" ");
             String remainder = null;
-            if(command.contains(" ")){
-                remainder = command.substring(command.indexOf(" ")+1).trim();
+            if (command.contains(" ")) {
+                remainder = command.substring(command.indexOf(" ") + 1).trim();
             }
             String cmd = tokenizedLine[0].trim();
             //TODO handle commands
-            if(ADD_ROOT_CMD.equalsIgnoreCase(cmd)){
+            if (ADD_ROOT_CMD.equalsIgnoreCase(cmd)) {
                 knowEngine.addResourceRoot(remainder);
-            }else if (SEARCH_CMD.equalsIgnoreCase(cmd)){
+            } else if (SEARCH_CMD.equalsIgnoreCase(cmd)) {
                 printResources(knowEngine.executeSearch(remainder));
+            } else if (ADD_TAG_CMD.equalsIgnoreCase(cmd)) {
+                knowEngine.addTag(tokenizedLine[1], tokenizedLine.length > 2 ? tokenizedLine[2] : null);
             }
         }
         return true;
     }
 
-    private void printResources(List<Resource> resources){
-        if(resources != null){
-            for(Resource r: resources){
-                System.out.printf("%s\t%s\n",r.getName(),r.getType().getCode());
+    private void printResources(List<Resource> resources) {
+        if (resources != null) {
+            for (Resource r : resources) {
+                System.out.printf("%s\t%s\t%s\n", r.getLocation(), r.getType().getCode(), r.getTagString());
             }
         }
     }
-
 
 }

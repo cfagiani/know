@@ -96,4 +96,17 @@ public class Resource {
     public void setAttributes(Map<String, String> attributes) {
         this.attributes = attributes;
     }
+
+    public String getTagString() {
+        StringBuilder builder = new StringBuilder();
+        if (tags != null) {
+            for (Tag t : tags) {
+                if (builder.length() > 0) {
+                    builder.append(",");
+                }
+                builder.append(t.getLabel());
+            }
+        }
+        return builder.toString();
+    }
 }

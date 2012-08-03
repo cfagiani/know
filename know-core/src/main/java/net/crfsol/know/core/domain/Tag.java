@@ -49,4 +49,20 @@ public class Tag {
     public void setParent(Tag parent) {
         this.parent = parent;
     }
+
+    public String printTree(int depth) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < depth; i++) {
+            builder.append("\t");
+        }
+        builder.append(label).append("\n");
+        if (getChildren() != null) {
+            for (Tag t : getChildren()) {
+                builder.append(t.printTree(depth + 1));
+            }
+        }
+        return builder.toString();
+    }
+
+
 }

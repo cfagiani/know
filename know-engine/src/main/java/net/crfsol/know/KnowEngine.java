@@ -1,6 +1,7 @@
 package net.crfsol.know;
 
 import net.crfsol.know.core.domain.Resource;
+import net.crfsol.know.core.domain.Tag;
 import net.crfsol.know.core.service.IndexService;
 import net.crfsol.know.core.service.SearchService;
 import net.crfsol.know.core.service.TagService;
@@ -58,7 +59,15 @@ public class KnowEngine implements ResourceListener {
         resourceBatch.clear();
     }
 
-    public List<Resource> executeSearch(String query){
+    public List<Resource> executeSearch(String query) {
         return searchService.search(query);
+    }
+
+    public void addTag(String tag, String parent) {
+        tagService.addTag(tag, parent);
+        Tag tree = tagService.getTagTree();
+        if (tree != null) {
+            System.out.println(tree.printTree(0));
+        }
     }
 }
