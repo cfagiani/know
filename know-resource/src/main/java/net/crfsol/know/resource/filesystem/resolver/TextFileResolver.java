@@ -8,7 +8,7 @@ import java.io.FileReader;
 
 
 public class TextFileResolver extends FileResolver {
-    private static final String[] EXTENSIONS = {"txt", "html", "java", "py", "jsp", "php", "h", "c", "cpp", "htm", "properties"};
+    private static final String[] EXTENSIONS = {"txt", "html", "java", "py", "jsp", "php", "h", "c", "cpp", "htm", "properties", "csv"};
     private static final String TYPE = "PLAINTEXT";
 
     @Override

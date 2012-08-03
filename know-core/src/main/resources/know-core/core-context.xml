@@ -35,6 +35,8 @@
 
     <bean id="luceneUtil" class="net.crfsol.know.core.util.LuceneUtil"/>
     <bean id="tagService" class="net.crfsol.know.core.service.TagServiceImpl"/>
+    <bean id="searchService" class="net.crfsol.know.core.service.SearchServiceImpl"/>
+    <bean id="indexService" class="net.crfsol.know.core.service.IndexServiceImpl"/>
 
 
     <context:annotation-config></context:annotation-config>

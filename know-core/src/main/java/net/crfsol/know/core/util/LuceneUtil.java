@@ -1,6 +1,8 @@
 package net.crfsol.know.core.util;
 
 import net.crfsol.know.core.domain.Resource;
+import net.crfsol.know.core.domain.ResourceType;
+import net.crfsol.know.core.domain.Tag;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -17,6 +19,8 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -46,6 +50,7 @@ public class LuceneUtil {
     public void finishBatch() throws Exception {
         if (writer != null) {
             writer.close();
+            writer = null;
         }
     }
 
@@ -53,7 +58,21 @@ public class LuceneUtil {
         if (resources != null && resources.size() > 0) {
             startBatch();
             for (Resource r : resources) {
+                Document doc = new Document();
+                if (r.getTextContent() != null) {
+                    doc.add(new Field("contents", r.getTextContent(), Field.Store.YES, Field.Index.ANALYZED));
+                }
+                doc.add(new Field("location", r.getLocation(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+                doc.add(new Field("lastIndexed", new Date().getTime() + "", Field.Store.YES, Field.Index.NO));
+                doc.add(new Field("title", r.getName(), Field.Store.YES, Field.Index.ANALYZED));
+                doc.add(new Field("type", r.getType().getCode(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
 
+                if (r.getTags() != null) {
+                    for (Tag t : r.getTags()) {
+                        doc.add(new Field("tag", t.getLabel(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+                    }
+                }
+                writer.updateDocument(new Term("location",r.getLocation()),doc);
             }
 
             if (autoFinishBatch) {
@@ -64,23 +83,35 @@ public class LuceneUtil {
 
     }
 
-    private Document findDocumentByQuery(String query) {
+    public List<Resource> resourceSearch(String query) {
+        List<Resource> results = new ArrayList<Resource>();
         try {
             refreshSearcher();
-            TopDocs matches = search(query, 1);
+            TopDocs matches = search(query, 100);
+
             if (matches.totalHits > 0) {
-                return getDocByInternalId(matches.scoreDocs[0].doc);
+                for(int i =0; i< matches.totalHits; i++){
+                    Document doc  = getDocByInternalId(matches.scoreDocs[0].doc);
+                    Resource r = new Resource();
+                    if(doc.getFieldable("title")!=null){
+                        r.setName(doc.getFieldable("title").stringValue());
+                    }
+                    r.setLocation(doc.getFieldable("location").stringValue());
+                    r.setType(new ResourceType(doc.getFieldable("type").stringValue()));
+                    results.add(r);
+                }
             }
         } catch (Exception e) {
             //TODO: handle
         }
-        return null;
+        return results;
     }
 
 
-    public void createDocument(String id, String content) throws Exception {
+    public synchronized void createDocument(String id, String content) throws Exception {
         Document d = new Document();
         startBatch();
+        d.add(new Field("guid", id, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
         d.add(new Field("contents", content, Field.Store.YES, Field.Index.ANALYZED));
         writer.updateDocument(new Term("guid", id), d);
         finishBatch();

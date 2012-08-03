@@ -9,10 +9,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
-
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -26,6 +26,11 @@ public class ResourceServiceFilesystemImplTest {
     public void findResourcesAtLocation() {
         resourceService.findResourcesAtLocation("/temp", null, new ResourceListener() {
             @Override
+            public void scanComplete(String loc) {
+
+            }
+
+            @Override
             public void resourceFound(Resource resource) {
                 assertNotNull("resource name is null", resource.getName());
                 if (resource.getLocation().endsWith(".java")) {
@@ -38,6 +43,11 @@ public class ResourceServiceFilesystemImplTest {
     @Test
     public void findResourcesAtLocationSinceDate() {
         resourceService.findResourcesAtLocation("/temp", new Date(), new ResourceListener() {
+            @Override
+            public void scanComplete(String loc) {
+
+            }
+
             @Override
             public void resourceFound(Resource resource) {
                 assertTrue("Search should return nothing", false);

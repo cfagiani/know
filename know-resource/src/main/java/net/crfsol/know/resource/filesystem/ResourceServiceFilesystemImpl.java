@@ -3,7 +3,6 @@ package net.crfsol.know.resource.filesystem;
 import net.crfsol.know.core.domain.Resource;
 import net.crfsol.know.resource.ResourceListener;
 import net.crfsol.know.resource.ResourceService;
-import net.crfsol.know.resource.filesystem.resolver.ResourceResolver;
 import net.crfsol.know.resource.filesystem.resolver.ResourceResolverFactory;
 
 import javax.inject.Inject;
@@ -20,6 +19,7 @@ public class ResourceServiceFilesystemImpl implements ResourceService {
     @Override
     public void findResourcesAtLocation(String location, Date sinceDate, ResourceListener listener) {
         findResourcesAtLocation(new File(location), sinceDate, listener);
+        listener.scanComplete(location);
     }
 
     private void findResourcesAtLocation(File root, Date sinceDate, ResourceListener listener) {

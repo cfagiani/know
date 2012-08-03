@@ -1,8 +1,6 @@
 package net.crfsol.know.resource.filesystem.resolver;
 
-import javax.inject.Inject;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,7 +20,7 @@ public class ResourceResolverFactory {
             String fileName = file.getName();
             fileName = fileName.trim().toLowerCase();
             if (fileName.contains(".") && !fileName.endsWith(".")) {
-                String extension = fileName.substring(fileName.lastIndexOf(".")+1);
+                String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
                 for (ResourceResolver r : resolvers) {
                     if (r.accepts(extension)) {
                         return r;
