@@ -36,6 +36,7 @@ public class PdfResolver extends FileResolver {
             COSDocument cd = parser.getDocument();
             PDFTextStripper stripper = new PDFTextStripper();
             r.setTextContent(stripper.getText(new PDDocument(cd)));
+            cd.close();
         } catch (Exception e) {
             //TODO: handle
         } finally {
