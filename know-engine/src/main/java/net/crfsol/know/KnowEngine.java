@@ -10,7 +10,9 @@ import net.crfsol.know.resource.ResourceService;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class KnowEngine implements ResourceListener {
 
@@ -68,6 +70,20 @@ public class KnowEngine implements ResourceListener {
         Tag tree = tagService.getTagTree();
         if (tree != null) {
             System.out.println(tree.printTree(0));
+        }
+    }
+
+    public void tagResource(String tag, String loc) {
+        if (tag != null && !tag.trim().isEmpty()) {
+            Resource r = searchService.findResource(loc);
+            if (r != null) {
+                if (r.getTags() == null) {
+                    Set<Tag> tags = new HashSet<Tag>();
+                    r.setTags(tags);
+                }
+                r.getTags().add(new Tag(tag));
+            }
+            indexService.indexResource(r);
         }
     }
 }

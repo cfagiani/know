@@ -9,6 +9,8 @@ public interface IndexService {
 
     public void indexBatch(List<Resource> resources, boolean autoFinishBatch);
 
+    public void indexResource(Resource resource);
+
     public void flushBatch();
 
 }

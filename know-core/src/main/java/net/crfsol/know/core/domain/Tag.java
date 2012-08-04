@@ -4,19 +4,17 @@ import java.util.List;
 
 
 public class Tag {
-    private String id;
     private String label;
     private String description;
     private Tag parent;
     private List<Tag> children;
 
-    public String getId() {
-        return id;
+    public Tag(String label){
+        this.label = label;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public Tag(){}
+
 
     public List<Tag> getChildren() {
         return children;
@@ -64,5 +62,20 @@ public class Tag {
         return builder.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Tag tag = (Tag) o;
+
+        if (label != null ? !label.equals(tag.label) : tag.label != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return label != null ? label.hashCode() : 0;
+    }
 }

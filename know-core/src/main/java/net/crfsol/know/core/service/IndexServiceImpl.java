@@ -32,4 +32,18 @@ public class IndexServiceImpl implements IndexService {
             //TODO: handle
         }
     }
+
+    @Override
+    public void indexResource(Resource resource) {
+        if (resource != null) {
+            try {
+                luceneUtil.startBatch();
+                luceneUtil.indexResource(resource);
+                luceneUtil.finishBatch();
+            } catch (Exception e) {
+                //TODO: handle
+                e.printStackTrace();
+            }
+        }
+    }
 }

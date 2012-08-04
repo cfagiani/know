@@ -48,6 +48,7 @@ public class KnowCli {
 
     }
 
+
     private boolean handleCommand(String command) {
         if (QUIT_CMD.equalsIgnoreCase(command.trim())) {
             return false;
@@ -67,6 +68,10 @@ public class KnowCli {
                 printResources(knowEngine.executeSearch(remainder));
             } else if (ADD_TAG_CMD.equalsIgnoreCase(cmd)) {
                 knowEngine.addTag(tokenizedLine[1], tokenizedLine.length > 2 ? tokenizedLine[2] : null);
+            }else if (TAG_DOC_CMD.equalsIgnoreCase(cmd)){
+                String loc = command.substring(command.indexOf(" ")+1).trim();
+                loc = loc.substring(loc.indexOf(" ")+1).trim();
+                knowEngine.tagResource(tokenizedLine[1],loc);
             }
         }
         return true;
@@ -79,5 +84,7 @@ public class KnowCli {
             }
         }
     }
+
+
 
 }

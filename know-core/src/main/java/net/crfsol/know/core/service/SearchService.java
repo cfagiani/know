@@ -8,4 +8,5 @@ import java.util.List;
 public interface SearchService {
 
     public List<Resource> search(String query);
+    public Resource findResource(String loc);
 }

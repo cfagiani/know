@@ -16,4 +16,13 @@ public class SearchServiceImpl implements SearchService {
     public List<Resource> search(String query) {
         return luceneUtil.resourceSearch(query);
     }
+
+    public Resource findResource(String loc) {
+        try {
+            return luceneUtil.getResourceByLocation(loc);
+        } catch (Exception e) {
+            //TODO: handle
+        }
+        return null;
+    }
 }

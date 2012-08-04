@@ -6,6 +6,7 @@ import net.crfsol.know.core.domain.Tag;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -19,9 +20,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 public class LuceneUtil {
@@ -58,28 +57,31 @@ public class LuceneUtil {
         if (resources != null && resources.size() > 0) {
             startBatch();
             for (Resource r : resources) {
-                Document doc = new Document();
-                if (r.getTextContent() != null) {
-                    doc.add(new Field("contents", r.getTextContent(), Field.Store.YES, Field.Index.ANALYZED));
-                }
-                doc.add(new Field("location", r.getLocation(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
-                doc.add(new Field("lastIndexed", new Date().getTime() + "", Field.Store.YES, Field.Index.NO));
-                doc.add(new Field("title", r.getName(), Field.Store.YES, Field.Index.ANALYZED));
-                doc.add(new Field("type", r.getType().getCode(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
-
-                if (r.getTags() != null) {
-                    for (Tag t : r.getTags()) {
-                        doc.add(new Field("tag", t.getLabel(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
-                    }
-                }
-                writer.updateDocument(new Term("location",r.getLocation()),doc);
+                indexResource(r);
             }
 
             if (autoFinishBatch) {
                 finishBatch();
             }
         }
+    }
 
+    public void indexResource(Resource r) throws Exception {
+        Document doc = new Document();
+        if (r.getTextContent() != null) {
+            doc.add(new Field("contents", r.getTextContent(), Field.Store.YES, Field.Index.ANALYZED));
+        }
+        doc.add(new Field("location", r.getLocation(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+        doc.add(new Field("lastIndexed", new Date().getTime() + "", Field.Store.YES, Field.Index.NO));
+        doc.add(new Field("title", r.getName(), Field.Store.YES, Field.Index.ANALYZED));
+        doc.add(new Field("type", r.getType().getCode(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+
+        if (r.getTags() != null) {
+            for (Tag t : r.getTags()) {
+                doc.add(new Field("tag", t.getLabel(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+            }
+        }
+        writer.updateDocument(new Term("location", r.getLocation()), doc);
 
     }
 
@@ -90,21 +92,37 @@ public class LuceneUtil {
             TopDocs matches = search(query, 100);
 
             if (matches.totalHits > 0) {
-                for(int i =0; i< matches.totalHits; i++){
-                    Document doc  = getDocByInternalId(matches.scoreDocs[i].doc);
-                    Resource r = new Resource();
-                    if(doc.getFieldable("title")!=null){
-                        r.setName(doc.getFieldable("title").stringValue());
-                    }
-                    r.setLocation(doc.getFieldable("location").stringValue());
-                    r.setType(new ResourceType(doc.getFieldable("type").stringValue()));
-                    results.add(r);
+                for (int i = 0; i < matches.totalHits; i++) {
+                    results.add(convertDocToResource(matches.scoreDocs[i].doc));
                 }
             }
         } catch (Exception e) {
             //TODO: handle
         }
         return results;
+    }
+
+    private Resource convertDocToResource(int docId) {
+        Document doc = getDocByInternalId(docId);
+        Resource r = new Resource();
+        if (doc.getFieldable("title") != null) {
+            r.setName(doc.getFieldable("title").stringValue());
+        }
+        if(doc.getFieldable("contents")!=null){
+            r.setTextContent(doc.getFieldable("contents").stringValue());
+        }
+        Fieldable[] tagFields = doc.getFieldables("tag");
+        if(tagFields!=null && tagFields.length>0){
+            Set<Tag> tags = new HashSet<Tag>();
+            for(Fieldable tagField:tagFields){
+                tags.add(new Tag(tagField.stringValue()));
+            }
+            r.setTags(tags);
+        }
+        r.setLocation(doc.getFieldable("location").stringValue());
+        r.setType(new ResourceType(doc.getFieldable("type").stringValue()));
+        return r;
+
     }
 
 
@@ -123,6 +141,17 @@ public class LuceneUtil {
         TopDocs hits = indexSearcher.search(query, 1);
         if (hits.totalHits > 0) {
             return getDocByInternalId(hits.scoreDocs[0].doc).get("contents");
+        } else {
+            return null;
+        }
+    }
+
+    public Resource getResourceByLocation(String location) throws Exception {
+        refreshSearcher();
+        TermQuery query = new TermQuery(new Term("location", location));
+        TopDocs hits = indexSearcher.search(query, 1);
+        if (hits.totalHits > 0) {
+            return convertDocToResource(hits.scoreDocs[0].doc);
         } else {
             return null;
         }
