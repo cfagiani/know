@@ -69,7 +69,9 @@ public class LuceneUtil {
     public void indexResource(Resource r) throws Exception {
         Document doc = new Document();
         if (r.getTextContent() != null) {
-            doc.add(new Field("contents", r.getTextContent(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.add(new Field("contents", r.getName()+"\n"+r.getTextContent(), Field.Store.YES, Field.Index.ANALYZED));
+        }else{
+            doc.add(new Field("contents", r.getName(), Field.Store.YES, Field.Index.ANALYZED));
         }
         doc.add(new Field("location", r.getLocation(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
         doc.add(new Field("lastIndexed", new Date().getTime() + "", Field.Store.YES, Field.Index.NO));
