@@ -10,4 +10,6 @@ public interface TagService {
     public Tag getTagTree();
 
     public Tag addTag(String label, String parent);
+
+    public Tag findOrCreateTag(String label);
 }

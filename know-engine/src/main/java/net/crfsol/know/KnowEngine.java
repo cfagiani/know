@@ -77,11 +77,12 @@ public class KnowEngine implements ResourceListener {
         if (tag != null && !tag.trim().isEmpty()) {
             Resource r = searchService.findResource(loc);
             if (r != null) {
+                Tag t = tagService.findOrCreateTag(tag.trim());
                 if (r.getTags() == null) {
                     Set<Tag> tags = new HashSet<Tag>();
                     r.setTags(tags);
                 }
-                r.getTags().add(new Tag(tag));
+                r.getTags().add(t);
             }
             indexService.indexResource(r);
         }

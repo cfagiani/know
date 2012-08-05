@@ -98,4 +98,13 @@ public class TagServiceImpl implements TagService {
         }
         return null;
     }
+
+    @Override
+    public Tag findOrCreateTag(String label) {
+        Tag tag = findTag(getTagTree(),label);
+        if(tag == null){
+            tag = addTag(label,null);
+        }
+        return tag;
+    }
 }
