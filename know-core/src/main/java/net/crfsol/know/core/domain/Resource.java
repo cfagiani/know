@@ -5,6 +5,12 @@ import java.util.Map;
 import java.util.Set;
 
 
+/**
+ * Datastructure to represent an indexed document. A resource can correspond to any indexable content. The location field
+ * will provide enough information to retrieve the actual resource from its source (for the case of file resources, this will be the absolute path).
+ *
+ * @author Christopher Fagiani
+ */
 public class Resource {
     private String id;
     private String location;

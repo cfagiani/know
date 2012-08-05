@@ -8,11 +8,19 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import java.io.File;
 import java.io.FileInputStream;
 
+/**
+ * populates a resource by parsing the contents of a Word file (doc and docx) using Apache POI
+ *
+ * @author Christopher Fagiani
+ */
 public class WordResolver extends FileResolver {
 
     private static final String[] EXTENSIONS = {"doc", "docx"};
     private static final String TYPE = "WORD";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean accepts(String extension) {
         for (String e : EXTENSIONS) {
@@ -23,6 +31,9 @@ public class WordResolver extends FileResolver {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Resource resolveResource(File file) {
         Resource r = super.resolveResource(file);

@@ -7,10 +7,20 @@ import net.crfsol.know.core.util.LuceneUtil;
 import javax.inject.Inject;
 import java.util.List;
 
+/**
+ * lucene-backed implementation of the index service. This service handles indexing any type of Resource.
+ * This implementation requires the client to manage flushing batches
+ * when indexing collections of resources.
+ *
+ * @author Christopher Fagiani
+ */
 public class IndexServiceImpl implements IndexService {
     @Inject
     private LuceneUtil luceneUtil;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void indexBatch(List<Resource> resources, boolean autoFinishBatch) {
         if (resources != null && resources.size() > 0) {
@@ -24,6 +34,9 @@ public class IndexServiceImpl implements IndexService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void flushBatch() {
         try {
@@ -33,6 +46,9 @@ public class IndexServiceImpl implements IndexService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void indexResource(Resource resource) {
         if (resource != null) {

@@ -21,7 +21,10 @@ public class TagServiceImpl implements TagService {
 
     private Tag tagTreeRoot;
 
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Tag getTagTree() {
         if (tagTreeRoot == null) {
             try {
@@ -40,6 +43,10 @@ public class TagServiceImpl implements TagService {
         return tagTreeRoot;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void saveTagTree(Tag tag) {
         try {
             tagTreeRoot = tag;
@@ -52,6 +59,9 @@ public class TagServiceImpl implements TagService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Tag addTag(String label, String parent) {
         Tag root = getTagTree();
@@ -83,6 +93,14 @@ public class TagServiceImpl implements TagService {
         }
     }
 
+    /**
+     * finds a single tag starting from the root passed in that has the label. If no matches are found, this method will
+     * return false.
+     *
+     * @param root  - root from which to search
+     * @param label - tag label for which to search
+     * @return Tag or null if not found
+     */
     public Tag findTag(Tag root, String label) {
         if (root != null) {
             if (root.getLabel().equalsIgnoreCase(label)) {
@@ -99,11 +117,14 @@ public class TagServiceImpl implements TagService {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Tag findOrCreateTag(String label) {
-        Tag tag = findTag(getTagTree(),label);
-        if(tag == null){
-            tag = addTag(label,null);
+        Tag tag = findTag(getTagTree(), label);
+        if (tag == null) {
+            tag = addTag(label, null);
         }
         return tag;
     }

@@ -9,6 +9,11 @@ import org.apache.pdfbox.util.PDFTextStripper;
 import java.io.File;
 import java.io.FileInputStream;
 
+/**
+ * populates a resource with the text content from a PDF using the PDFBox library
+ *
+ * @author Christopher Fagiani
+ */
 public class PdfResolver extends FileResolver {
 
     private static final String[] EXTENSIONS = {"pdf"};

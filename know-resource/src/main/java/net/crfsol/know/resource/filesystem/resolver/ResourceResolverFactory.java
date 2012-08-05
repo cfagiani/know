@@ -4,17 +4,28 @@ import java.io.File;
 import java.util.List;
 
 
+/**
+ * factory responsible for returning the correct ResourceResolver based on information about the file that represents the resource.
+ *
+ *
+ * @author Christopher Fagiani
+ */
 public class ResourceResolverFactory {
 
     private List<ResourceResolver> resolvers;
+    private ResourceResolver defaultResolver = new FileResolver();
 
     public void setResolvers(List<ResourceResolver> resolvers) {
         this.resolvers = resolvers;
     }
 
-    private ResourceResolver defaultResolver = new FileResolver();
 
-
+    /**
+     * this method will use the file extension to find the correct ResolverInstance that is capable of parsing the file.
+     * If no instance is found, the defaultResolver will be used.
+     * @param file
+     * @return
+     */
     public ResourceResolver getResourceResolver(File file) {
         if (file != null) {
             String fileName = file.getName();

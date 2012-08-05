@@ -1,15 +1,20 @@
 package net.crfsol.know.core.domain;
 
 
+/**
+ * Describes the type of resource. This can be something like WORD Doc, POWERPOINT, PDF, etc.
+ *
+ * @author Christopher Fagiani
+ */
 public class ResourceType {
     private String displayName;
     private String code;
 
-    public ResourceType(String code){
+    public ResourceType(String code) {
         this.code = code;
     }
 
-    public ResourceType(){
+    public ResourceType() {
 
     }
 

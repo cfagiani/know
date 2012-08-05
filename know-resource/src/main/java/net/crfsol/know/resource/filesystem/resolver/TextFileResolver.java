@@ -7,10 +7,18 @@ import java.io.File;
 import java.io.FileReader;
 
 
+/**
+ * populates a Resource by parsing the content as a text file. This class can handle any plaintext files.
+ *
+ * @author Christopher Fagiani
+ */
 public class TextFileResolver extends FileResolver {
     private static final String[] EXTENSIONS = {"txt", "html", "java", "py", "jsp", "php", "h", "c", "cpp", "htm", "properties", "csv"};
     private static final String TYPE = "PLAINTEXT";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean accepts(String extension) {
         for (String e : EXTENSIONS) {
@@ -21,6 +29,9 @@ public class TextFileResolver extends FileResolver {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Resource resolveResource(File file) {
         Resource r = super.resolveResource(file);

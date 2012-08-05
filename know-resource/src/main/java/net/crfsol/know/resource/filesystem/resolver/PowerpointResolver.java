@@ -9,6 +9,11 @@ import org.apache.poi.xslf.extractor.XSLFPowerPointExtractor;
 import java.io.File;
 import java.io.FileInputStream;
 
+/**
+ * populates a Resource by parsing powerpoint (ppt and pptx) files using Apache POI
+ *
+ * @author Christopher Fagiani
+ */
 public class PowerpointResolver extends FileResolver {
 
     private static final String[] EXTENSIONS = {"ppt", "pptx"};
