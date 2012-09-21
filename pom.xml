@@ -39,6 +39,16 @@
             </dependency>
             <dependency>
                 <groupId>net.crfsol.know</groupId>
+                <artifactId>know-webapp</artifactId>
+                <version>${release}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.crfsol.know</groupId>
+                <artifactId>know-ui</artifactId>
+                <version>${release}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.crfsol.know</groupId>
                 <artifactId>know-engine</artifactId>
                 <version>${release}</version>
             </dependency>
@@ -162,6 +172,11 @@
                 <artifactId>jetty-server</artifactId>
                 <version>${jetty.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-webapp</artifactId>
+                <version>${jetty.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>log4j</groupId>
@@ -225,5 +240,7 @@
         <module>know-engine</module>
         <module>know-core</module>
         <module>know-resource</module>
+        <module>know-ui</module>
+        <module>know-webapp</module>
     </modules>
 </project>

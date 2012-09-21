@@ -7,5 +7,6 @@ package net.crfsol.know.resource.filesystem.resolver;
  * @author Christopher Fagiani
  */
 public class ImageResolver extends FileResolver {
-    //TODO: read EXIF tags
+   //TODO: decide if we want to keep this. Will need JAI to be able to decode exif since its stored as a tiff
+
 }
