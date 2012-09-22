@@ -105,6 +105,13 @@
 <script src="js/know.js"></script>
 <script language="javascript">
     $(document).ready(function() {
+        //bind the enter key to the search box
+        $("#search-text").keyup(function(event){
+            if(event.keyCode == 13){
+                doSearch();
+            }
+        });
+
         getTags(function(data){
             formTagHtml(data.payload, "#tag-area");
         });
@@ -128,15 +135,22 @@
         search(query, function(data){
             $("#result-div").empty();
 
-            if(data.payload == null){
+            if(data.payload == null || data.payload.length == 0){
                 $("#result-div").append("<div class='span9'><div id='result-label'><h3>No Resources Match Query</h3></div></div>");
             }else{
                 $("#result-div").append("<div class='span9'><div id='result-label'><h3>Search Results</h3></div></div>");
-                for(var i =0; i < data.payload.size; i++){
+                var resultsHtml = "";
+                for(var i =0; i < data.payload.length; i++){
                     if(i % 3 ==0){
-
+                        if(i > 0){
+                            resultsHtml += "</div>";
+                        }
+                        resultsHtml += "<div class='row-fluid' id='result-row'>";
                     }
+                    resultsHtml += "<div class='span4'><h2>"+data.payload[i].name+"</h2><p>Type: "+data.payload[i].type.code+"</p><p><a class='btn' href='#'>View&raquo;</a></p></div>";
+
                 }
+                $("#result-div").append(resultsHtml);
          }
         });
     }
