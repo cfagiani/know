@@ -77,36 +77,13 @@
             <div class="hero-unit">
                 <h1>KNOW - Personal Knowledge Manager</h1>
 
-                <p><input type="text"/></p>
+                <p><input type="text" id="search-text"/></p>
 
-                <p><a class="btn btn-primary btn-large">Search &raquo;</a></p>
+                <p><a class="btn btn-primary btn-large" onclick="doSearch()">Search &raquo;</a></p>
             </div>
-            <div class="span9">
-                <div id="result-label"><h3>Search Results</h3> </div>
-            </div>
-            <div class="row-fluid" id="result-row">
-                <div class="span4">
-                    <h2>Doc 1</h2>
-                    <p>this is preview text </p>
-                    <p><a class="btn" href="#">View details &raquo;</a></p>
-                </div>
-                <!--/span-->
-                <div class="span4">
-                    <h2>Doc 2</h2>
-                    <p>this is preview text </p>
+            <div id="result-div" class="span9">
 
-                    <p><a class="btn" href="#">View details &raquo;</a></p>
-                </div>
-                <!--/span-->
-                <div class="span4">
-                    <h2>Doc 3</h2>
-                    <p>this ir preview text </p>
-
-                    <p><a class="btn" href="#">View details &raquo;</a></p>
-                </div>
-                <!--/span-->
             </div>
-            <!--/row-->
         </div>
         <!--/span-->
     </div>
@@ -128,13 +105,41 @@
 <script src="js/know.js"></script>
 <script language="javascript">
     $(document).ready(function() {
-
         getTags(function(data){
-            $.each(data.payload, function(i, val) {
-                $('#tag-area').append("<li>"+val.label+"</li>");
-            });
+            formTagHtml(data.payload, "#tag-area");
         });
     });
+
+    function formTagHtml(tags, elementId){
+        if(tags != null){
+            $.each(tags, function(i,val){
+                 $(elementId).append("<li><a href='#'>"+val.label+"</a></li>");
+                  if(val.children != null){
+                    var childElementId =val.label+"-child";
+                    $(elementId).append("<ul id='"+childElementId+"'></ul>");
+                    formTagHtml(val.children, "#"+childElementId);
+                   }
+            });
+        }
+    }
+
+    function doSearch(){
+        var query = $("#search-text").val();
+        search(query, function(data){
+            $("#result-div").empty();
+
+            if(data.payload == null){
+                $("#result-div").append("<div class='span9'><div id='result-label'><h3>No Resources Match Query</h3></div></div>");
+            }else{
+                $("#result-div").append("<div class='span9'><div id='result-label'><h3>Search Results</h3></div></div>");
+                for(var i =0; i < data.payload.size; i++){
+                    if(i % 3 ==0){
+
+                    }
+                }
+         }
+        });
+    }
 
 </script>
 </body>

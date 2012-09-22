@@ -8,6 +8,8 @@
 
     <import resource="classpath:know-engine/engine-context.xml"/>
     <context:annotation-config></context:annotation-config>
+    <bean id="knowCli" class="net.crfsol.know.cli.KnowCli"/>
+
     <bean id="server" class="org.eclipse.jetty.server.Server" init-method="start" destroy-method="stop">
 
         <property name="connectors">

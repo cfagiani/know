@@ -10,7 +10,6 @@
     <import resource="classpath:know-resource/resource-context.xml"/>
 
     <bean id="knowEngine" class="net.crfsol.know.KnowEngine"/>
-    <bean id="knowCli" class="net.crfsol.know.cli.KnowCli"/>
 
     <context:annotation-config></context:annotation-config>
 </beans>
