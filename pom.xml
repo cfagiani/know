@@ -25,7 +25,7 @@
     <properties>
         <spring.version>3.1.0.RELEASE</spring.version>
         <lucene.version>3.6.1</lucene.version>
-        <jetty.version>8.1.5.v20120716</jetty.version>
+        <jetty.version>9.4.34.v20201102</jetty.version>
         <guava.version>11.0.1</guava.version>
         <release>1.0-SNAPSHOT</release>
     </properties>
